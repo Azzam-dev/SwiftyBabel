@@ -22,7 +22,7 @@ let package = Package(
         .target(
             name: "SwiftyBabel",
             path: "Sources",
-            resources: [.copy("Resources/babel.js")]),
+            resources: [.copy("Resources/babel.js"), .copy("Resources/parser.js")]),
         .testTarget(
             name: "SwiftyBabelTests",
             dependencies: ["SwiftyBabel"]),

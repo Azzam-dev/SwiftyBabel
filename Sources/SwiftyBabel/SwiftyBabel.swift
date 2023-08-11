@@ -1,5 +1,5 @@
 //
-//  Loader.swift
+//  SwiftyBabel.swift
 //  FractalBabelLoader
 //  Copyright © 2018 Giuseppe Salvo. All rights reserved.
 //
@@ -26,7 +26,7 @@ class SwiftyBabel {
     }
     
     func transpile(code: String) throws -> String? {
-        guard let context = BabelContext.shared.context else {
+        guard let context = BabelTranspilerContext.shared.context else {
             throw BabelLoaderError(.nilBabelContext, value: "found nil in Babel Context")
         }
         let babel = context.globalObject.forProperty("Babel")
@@ -44,11 +44,10 @@ class SwiftyBabel {
     }
     
     func parse(code: String) throws -> JSValue? {
-        guard let context = BabelContext.shared.context else {
+        guard let context = BabelParserContext.shared.context else {
             throw BabelLoaderError(.nilBabelContext, value: "found nil in Babel Context")
         }
         let babel = context.globalObject.forProperty("Babel")
-        print("what the Babel....?:", babel?.toString())
         let ast = babel!.invokeMethod("parse", withArguments: [ // Fix: can not get the parse function
             code, options
         ])!.forProperty("program")
@@ -64,7 +63,7 @@ class SwiftyBabel {
     }
     
     func generate(ast: JSValue) throws -> String? {
-        guard let context = BabelContext.shared.context else {
+        guard let context = BabelTranspilerContext.shared.context else {
             throw BabelLoaderError(.nilBabelContext, value: "found nil in Babel Context")
         }
         let babel = context.globalObject.forProperty("Babel")
