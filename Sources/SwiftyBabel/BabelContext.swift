@@ -13,7 +13,7 @@ class BabelContext {
     
     private init() {
         
-        guard let babelURL = Bundle.main.url(forResource: "babel", withExtension: "js") else {
+        guard let babelURL = Bundle.module.url(forResource: "babel", withExtension: "js") else {
             print("error: failed while loading babel.min.js file")
             return
         }
