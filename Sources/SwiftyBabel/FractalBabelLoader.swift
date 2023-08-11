@@ -31,7 +31,7 @@ class SwiftyBabel {
         }
         let babel = context.globalObject.forProperty("Babel")
         
-        let value = babel!.invokeMethod("transform", withArguments: [
+        let code = babel!.invokeMethod("transform", withArguments: [
             code, options
         ])!.forProperty("code")
         
@@ -40,25 +40,27 @@ class SwiftyBabel {
             throw BabelLoaderError(.codeNotValid, value: exception)
         }
         
-        return value!.toString()!
+        return code?.toString()
     }
     
-    func parse(code: String) throws -> JSValue {
+    func parse(code: String) throws -> JSValue? {
         guard let context = BabelContext.shared.context else {
             throw BabelLoaderError(.nilBabelContext, value: "found nil in Babel Context")
         }
         let babel = context.globalObject.forProperty("Babel")
-        
-        let value = babel!.invokeMethod("parse", withArguments: [
+        print("what the Babel....?:", babel?.toString())
+        let ast = babel!.invokeMethod("parse", withArguments: [ // Fix: can not get the parse function
             code, options
-        ])!.forProperty("code")
+        ])!.forProperty("program")
+        
         
         if let exception = context.exception {
+            print("what is going on here???!", context.exception)
             context.exception = nil
             throw BabelLoaderError(.codeNotValid, value: exception)
         }
         
-        return value!
+        return ast
     }
     
     func generate(ast: JSValue) throws -> String? {
@@ -76,7 +78,7 @@ class SwiftyBabel {
             throw BabelLoaderError(.codeNotValid, value: exception)
         }
         
-        return value!.toString()!
+        return value?.toString()
     }
 
 }
