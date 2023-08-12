@@ -13,3 +13,7 @@ A Swift wrapper for Babel.js
 ## Credits
 
 ### Get in touch
+
+### License
+
+SwiftyBabel is available under the MIT license. See the LICENSE file for more info.
