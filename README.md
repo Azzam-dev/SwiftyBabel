@@ -12,38 +12,43 @@ SwiftyBabel allows you to use Babel.js with your Swift projects without having t
 
 ## Getting Started Guide
 ### Installation
-### Swift Package Manager
 
-SwiftyBabel can be installed using the Swift Package Manager. 
+### Swift Package Manager
+SwiftyBabel is also available through [Swift Package Manager](https://github.com/apple/swift-package-manager). 
+To install it, simply add the dependency to your Package.Swift file:
+
+```swift
+...
+dependencies: [
+    .package(url: "https://github.com/Azzam-dev/SwiftyBabel.git", from: "1.0.0"),
+],
+targets: [
+    .target( name: "YourTarget", dependencies: ["SwiftyBabel"]),
+]
+...
+```
+
 
 ### Usage
 
-To use SwiftyBabel, simply import the `SwiftyBabel`:
+To use SwiftyBabel, simply import the SwiftyBabel module and use the compile function to compile your JavaScript code. For example:
 
-
-`
+```swift
 import SwiftyBabel
-`
 
-Then, create an instance of SwiftyBabel and call its translate method:
+let input = "const square = n => n * n;"
+let options = BabelOptions(presets: ["env"])
+let output = try Babel.compile(input, options: options)
 
-`
-  let babel = SwiftyBabel()
-  let result = babel.translate(code: "const hello = () => 'Hello, world!'", from: .es6, to: .commonJS)
-  print(result.output)
-`
+print(output.code) // Output: "var square = function square(n) { return n * n; };"
 
-This will output the following:
+```
 
-`
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.hello = void 0;
-const hello = () => 'Hello, world!';
-exports.hello = hello;
-`
+
+## Contributing
+
+If you'd like to contribute to SwiftyBabel, please feel free to submit a pull request! We welcome contributions from the community.
+
 
 ## Credits
 
