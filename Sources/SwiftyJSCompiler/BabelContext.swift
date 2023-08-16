@@ -29,24 +29,24 @@ class BabelTranspilerContext {
 
 }
 
-class BabelParserContext {
+class EsprimaParserContext {
     
-    static let shared = BabelParserContext()
+    static let shared = EsprimaParserContext()
 
     let context = JSContext()
     
     private init() {
         
-        guard let babelURL = Bundle.module.url(forResource: "parser", withExtension: "js") else {
-            print("error: failed while loading parser.js file")
+        guard let esprimaURL = Bundle.module.url(forResource: "esprima", withExtension: "js") else {
+            print("error: failed while loading esprima.js file")
             return
         }
         
         do {
-            let babelContent = try String(contentsOf: babelURL)
-            _ = context?.evaluateScript(babelContent)
+            let esprimaContent = try String(contentsOf: esprimaURL)
+            _ = context?.evaluateScript(esprimaContent)
         } catch {
-            print("error: failed while loading parser.js content")
+            print("error: failed while loading esprima.js content")
             return
         }
     }

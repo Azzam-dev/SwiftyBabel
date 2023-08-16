@@ -3,10 +3,10 @@
 //  FractalBabelLoader//  Copyright © 2018 Giuseppe Salvo. All rights reserved.
 //
 
-struct BabelLoaderError: Error, CustomStringConvertible {
+struct LoaderError: Error, CustomStringConvertible {
     
     enum What {
-        case generic, codeNotValid, noOptionsDefined, nilBabelContext
+        case generic, codeNotValid, noOptionsDefined, nilContext
     }
     
     let value: Any

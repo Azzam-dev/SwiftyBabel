@@ -7,9 +7,10 @@
 import Foundation
 import JavaScriptCore
 
-class SwiftyBabel {
+class SwiftyJSCompiler {
     
     var options : [String: Any] = ["presets": ["es2015"]]
+    var optionse : [String: Any] = ["jsx": true]
     
     required init() {
         firstInit()
@@ -27,7 +28,7 @@ class SwiftyBabel {
     
     func transpile(code: String) throws -> String? {
         guard let context = BabelTranspilerContext.shared.context else {
-            throw BabelLoaderError(.nilBabelContext, value: "found nil in Babel Context")
+            throw LoaderError(.nilContext, value: "found nil in Babel Context")
         }
         let babel = context.globalObject.forProperty("Babel")
         
@@ -37,26 +38,24 @@ class SwiftyBabel {
         
         if let exception = context.exception {
             context.exception = nil
-            throw BabelLoaderError(.codeNotValid, value: exception)
+            throw LoaderError(.codeNotValid, value: exception)
         }
         
         return code?.toString()
     }
     
     func parse(code: String) throws -> JSValue? {
-        guard let context = BabelParserContext.shared.context else {
-            throw BabelLoaderError(.nilBabelContext, value: "found nil in Babel Context")
+        guard let context = EsprimaParserContext.shared.context else {
+            throw LoaderError(.nilContext, value: "found nil in Esprima Context")
         }
-        let babel = context.globalObject.forProperty("Babel")
-        let ast = babel!.invokeMethod("parse", withArguments: [ // Fix: can not get the parse function
-            code, options
-        ])!.forProperty("program")
-        
+        let esprima = context.globalObject.forProperty("esprima")
+        let ast = esprima!.invokeMethod("parse", withArguments: [code, optionse]).forProperty("body")
+        print("did I do it?:", ast!.toObject())
         
         if let exception = context.exception {
             print("what is going on here???!", context.exception)
             context.exception = nil
-            throw BabelLoaderError(.codeNotValid, value: exception)
+            throw LoaderError(.codeNotValid, value: exception)
         }
         
         return ast
@@ -64,7 +63,7 @@ class SwiftyBabel {
     
     func generate(ast: JSValue) throws -> String? {
         guard let context = BabelTranspilerContext.shared.context else {
-            throw BabelLoaderError(.nilBabelContext, value: "found nil in Babel Context")
+            throw LoaderError(.nilContext, value: "found nil in Babel Context")
         }
         let babel = context.globalObject.forProperty("Babel")
         
@@ -74,7 +73,7 @@ class SwiftyBabel {
         
         if let exception = context.exception {
             context.exception = nil
-            throw BabelLoaderError(.codeNotValid, value: exception)
+            throw LoaderError(.codeNotValid, value: exception)
         }
         
         return value?.toString()
